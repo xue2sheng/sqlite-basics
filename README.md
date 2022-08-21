@@ -34,7 +34,9 @@ As expected, the more dependencies your binary has, the smaller it is:
 	test01 ls -larth ./test01
 	-rwxr-xr-x 1 user users 30K Aug 20 21:50 ./test01*
 
-Trying to generate 'static' binaries will depend on what libraries you're using and what operative system you should support. For example, if your Linux distro doesn't install all 'static' libraries by default, i.e. Archlinux got only boost static libraries, you should provide the rest. In other words, download the missing static libraries source code, statically build them following their specific instruction, i.e. [sqlite3](https://github.com/sqlite/sqlite) or [vsqlite++](https://github.com/vinzenz/vsqlite--), and then proceed to build our 'static' binary.
+Trying to generate 'static' binaries will depend on what libraries you're using and what operative system you should support. For example, if your Linux distro doesn't install all 'static' libraries by default, i.e. Archlinux got only boost static libraries, you should provide the rest. 
+
+In other words, download the missing static libraries source code, statically build them following their specific instruction, i.e. [sqlite3](https://github.com/sqlite/sqlite) or [vsqlite++](https://github.com/vinzenz/vsqlite--), and then proceed to build our 'static' binary.
 
 	make additional
 	g++ -L./static -L/usr/lib main.cpp -static -lvsqlitepp -lsqlite3 -lboost_filesystem -o test01_static && ./test01_static
@@ -49,7 +51,7 @@ Trying to generate 'static' binaries will depend on what libraries you're using 
 	ls -larth ./test01_static 
 	-rwxr-xr-x 1 user users 8.6M Aug 21 03:10 ./test01_static
 
-But the cleanest approach for 'static' binaries would be to use a proper Docker, perferably Alpine with musl C/C++, where boost, sqlite and vsqlite++ are dealt with. Besides, you might avoid ugly 'statically' built dependencies, i.e. ldopen, that way.
+But the cleanest approach for 'static' binaries would be to use a proper Docker, perferably Alpine with musl C/C++, where boost, sqlite and vsqlite++ are dealt with. Besides, you might avoid ugly 'statically' built dependencies, i.e. [ldopen](https://wiki.musl-libc.org/functional-differences-from-glibc.html#Lazy-bindings), that way.
 
 ## [Rust](test02/)
 
