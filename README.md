@@ -1,6 +1,6 @@
 # sqlite-basics
 
-Fooling around with different languages about sqlite basics. The intention is to learn their differnt strong and weak points when it comes down to development and  deployment.
+Fooling around with different languages about sqlite basics. The intention is to learn their different strong and weak points when it comes down to development and  deployment.
 
 Therefore, we will just use the "hello world" sqlite at [Achlinux wiki](https://wiki.archlinux.org/title/SQLite):
 
@@ -34,7 +34,22 @@ As expected, the more dependencies your binary has, the smaller it is:
 	test01 ls -larth ./test01
 	-rwxr-xr-x 1 user users 30K Aug 20 21:50 ./test01*
 
-Trying to generate 'static' binaries will depend on what libraries you're using and what operative system you should support.
+Trying to generate 'static' binaries will depend on what libraries you're using and what operative system you should support. For example, if your Linux distro doesn't install all 'static' libraries by default, i.e. Archlinux got only boost static libraries, you should provide the rest. In other words, download the missing static libraries source code, statically build them following their specific instruction, i.e. [sqlite3](https://github.com/sqlite/sqlite) or [vsqlite++](https://github.com/vinzenz/vsqlite--), and then proceed to build our 'static' binary.
+
+	make additional
+	g++ -L./static -L/usr/lib main.cpp -static -lvsqlitepp -lsqlite3 -lboost_filesystem -o test01_static && ./test01_static
+	/usr/bin/ld: ./static/libsqlite3.a(sqlite3.o): in function `unixDlOpen':
+	/home/user/Code/sqlite/static/sqlite/build/sqlite3.c:42061: warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
+	word='helloworld' value=20
+	word='archlinux' value=30
+
+	ldd ./test01_static 
+	not a dynamic executable
+
+	ls -larth ./test01_static 
+	-rwxr-xr-x 1 user users 8.6M Aug 21 03:10 ./test01_static
+
+But the cleanest approach for 'static' binaries would be to use a proper Docker, perferably Alpine with musl C/C++, where boost, sqlite and vsqlite++ are dealt with. Besides, you might avoid ugly 'statically' built dependencies, i.e. ldopen, that way.
 
 ## [Rust](test02/)
 

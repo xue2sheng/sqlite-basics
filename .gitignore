@@ -23,7 +23,7 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
+#*.a
 *.lib
 
 # Executables
@@ -33,6 +33,7 @@
 
 # test01
 test01/test01
+test01/test01_static
 
 # test02
 test02/Cargo.lock
