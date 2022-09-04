@@ -51,7 +51,11 @@ In other words, download the missing static libraries source code, statically bu
 	ls -larth ./test01_static 
 	-rwxr-xr-x 1 user users 8.6M Aug 21 03:10 ./test01_static
 
-But the cleanest approach for 'static' binaries would be to use a proper Docker, perferably Alpine with musl C/C++, where boost, sqlite and vsqlite++ are dealt with. Besides, you might avoid ugly 'statically' built dependencies, i.e. [ldopen](https://wiki.musl-libc.org/functional-differences-from-glibc.html#Lazy-bindings), that way.
+But the cleanest approach for 'static' binaries would be to use a proper Docker, where boost, sqlite and vsqlite++ are dealt with. Besides, you might avoid ugly 'statically' built dependencies, i.e. [ldopen](https://wiki.musl-libc.org/functional-differences-from-glibc.html#Lazy-bindings), that way. Remember you might have let your docker container to access Internet to download additional packages:
+
+	# host /etc/resolv.conf --> nameserver 8.8.8.8
+	docker build --network host -t sqlite-debian .
+	docker run --rm -v `pwd`:/tmp -t sqlite-debian make static-binary
 
 ## [Rust](test02/)
 
