@@ -6,6 +6,7 @@ static-binary: main.go test03.db go.mod go.sum
 	cp go.mod ~/build/go.mod 
 	cp go.sum ~/build/go.sum	
 	cd ~/build && GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -ldflags '-extldflags "-static"' -o /tmp/test03_static
+	cd ~/build && GOOS=windows GOARCH=amd64 go build -o /tmp/test03.exe
 	rm -rf ~/build
 	/tmp/test03_static
 clean:  
