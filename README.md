@@ -57,6 +57,8 @@ But the cleanest approach for 'static' binaries would be to use a proper Docker,
 	docker build --network host -t sqlite-debian-cpp .
 	docker run --rm -v `pwd`:/tmp -t sqlite-debian-cpp make static-binary
 
+Take into account that you might want to modify what 'user' is used at that Dockerfile.
+
 ## [Rust](test02/)
 
 Provided you have access to a C compiler on your system, working with Rust will allow you to generate 'static' binaries in an easier way than before.
@@ -96,6 +98,14 @@ As expected, there is a balance between dependencies and size:
 
 	ls -larth ./test03
 	-rwxr-xr-x 1 user users 3.4M Aug 20 23:36 ./test03*
+
+There is some example of a  Dockerfile to build a static linux binary and cross-compiled windows one. Remember you might have let your docker container to access Internet to download additional packages:
+
+	# host /etc/resolv.conf --> nameserver 8.8.8.8
+	docker build --network host -t sqlite-debian-golang .
+	docker run --rm -v `pwd`:/tmp -t sqlite-debian-golang make static-binary
+
+Take into account that you might want to modify what 'user' is used at that Dockerfile.
 
 ## Conclusion
 
