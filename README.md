@@ -109,9 +109,9 @@ Take into account that you might want to modify what 'user' is used at that Dock
 
 ## Conclusion
 
-For fast development, when your team doesn't have too much time or willingmess to learn new languages, and you're forced to use Windows as daily driver, Go might be the first option to consider. Easy to learn and no dependencies on C/C++ toolchains.
+For fast development, when your team doesn't have too much time or willingmess to learn new languages, and you're forced to use Windows as daily driver although your target is Linux, Go might be the first option to consider. Easy to learn and no too cumbersome dependencies on C/C++ toolchains, especially for cross-compilations.
 
-If your team can invest the time on learning complex languages and developing a bit slower pace, Rust could be your next candidate. Take into account its learning curve is not a joke and its dependency on a C toolchain. Being a "novelty" doesn't help on a typical corporate Windows workplace although developers lovethis language. 
+If your team can invest the time on learning complex languages and developing at a bit slower pace, Rust could be your next candidate. Take into account its learning curve is not a joke and its dependency on a C toolchain might be a limitaton for some company policies. Being a "novelty" doesn't help on a typical corporate Windows workplace although developers love this language and its tooling. 
 
-In case your product requires fast and small binaries, C++ might be the best option to get your bosses on board. But only provided you're working with containers and allowed to invest time on DevOps. Getting your toolchain to produce small static binaries to be easily deployed might imply to use the latest versions of compilers and dependencies only avaible in updated Docker images.
+In case your product requires fast and small binaries, C++ might be the best option to get your bosses on board. But only provided you're working with containers and/or allowed to invest time on DevOps. Getting your toolchain to produce small static binaries to be easily deployed might imply to use the latest versions of compilers and dependencies and investigations on your Linux boxes. Having avaible updated Docker images should spare you a lot of time and suffering.
  
