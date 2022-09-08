@@ -99,7 +99,7 @@ As expected, there is a balance between dependencies and size:
 	ls -larth ./test03
 	-rwxr-xr-x 1 user users 3.4M Aug 20 23:36 ./test03*
 
-There is some example of a  Dockerfile to build a static linux binary and cross-compiled windows one. Remember you might have let your docker container to access Internet to download additional packages:
+There is some example of a  Dockerfile to build a static linux binary. Remember you might have let your docker container to access Internet to download additional packages:
 
 	# host /etc/resolv.conf --> nameserver 8.8.8.8
 	docker build --network host -t sqlite-debian-golang .
