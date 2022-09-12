@@ -78,6 +78,14 @@ As expected, the fewer dependencies your binary has, the bigger it is:
 	ls -larth target/x86_64-unknown-linux-musl/release/test02
 	-rwxr-xr-x 2 user users 5.7M Aug 20 20:56 target/x86_64-unknown-linux-musl/release/test02*
 
+Although it doesn't make too much sense for this example, here you are some basic Dockerfile to build statically that binary. Remember you might have let your docker container to access Internet to download additional packages:
+
+	# host /etc/resolv.conf --> nameserver 8.8.8.8
+	docker build --network host -t sqlite-debian-rust .
+	docker run --rm -v `pwd`:/tmp -t sqlite-debian-rust make static-binary
+
+Take into account that you might want to modify what 'user' is used at that Dockerfile.
+
 ## [Go](test03/)
 
 If you don't want to depend on C/C++ compilers and make your life easy when it comes down to cross-compiling from other systems, i.e. Windows, Go might be a clever option. Take into account Go got its grabage collector to speed development up, but implying bigger binaries just for that fact.
@@ -99,7 +107,7 @@ As expected, there is a balance between dependencies and size:
 	ls -larth ./test03
 	-rwxr-xr-x 1 user users 3.4M Aug 20 23:36 ./test03*
 
-There is some example of a  Dockerfile to build a static linux binary. Remember you might have let your docker container to access Internet to download additional packages:
+There is some example of a Dockerfile to build a static linux binary. Remember you might have let your docker container to access Internet to download additional packages:
 
 	# host /etc/resolv.conf --> nameserver 8.8.8.8
 	docker build --network host -t sqlite-debian-golang .
