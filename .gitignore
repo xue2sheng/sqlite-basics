@@ -31,6 +31,10 @@
 *.out
 *.app
 
+# test00
+test00/test00
+test00/test00_static
+
 # test01
 test01/test01
 test01/test01_static
