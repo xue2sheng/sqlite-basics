@@ -8,6 +8,54 @@ Therefore, we will just use the "hello world" sqlite at [Achlinux wiki](https://
        insert into tblone values('helloworld',20);
        insert into tblone values('archlinux', 30);
 
+## [C](test00/)
+
+Taking for granted your daily driver is Linux, i.e. Archlinux, is very easy to have installed your dependencies with the standard package manager, i.e. pacman, and develop in the usual way.
+
+[Code Example](test00/main.c)
+
+As expected, the more dependencies your binary has, the smaller it is:
+
+	make
+	gcc main.c -lsqlite3 -o test00 && ./test00
+	word='helloworld' value=20
+	word='archlinux' value=30
+
+	ldd ./test00
+	linux-vdso.so.1 => linux-vdso.so.1 (0x00007fff5ad94000)
+	libsqlite3.so.0 => /usr/lib/libsqlite3.so.0 (0x00007fbf3907a000)
+	libc.so.6 => /usr/lib/libc.so.6 (0x00007fbf38e93000)
+	libm.so.6 => /usr/lib/libm.so.6 (0x00007fbf38dab000)
+	/lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007fbf39208000)
+
+	ls -larth ./test00
+	-rwxr-xr-x 1 user users 21K Sep 12 19:19 ./test00*
+
+Trying to generate 'static' binaries will depend on what libraries you're using and what operative system you should support. For example, if your Linux distro doesn't install all 'static' libraries by default, i.e. Archlinux got only boost static libraries, you should provide the rest. 
+
+In other words, download the missing static libraries source code, statically build them following their specific instruction, i.e. [sqlite3](https://github.com/sqlite/sqlite), and then proceed to build our 'static' binary.
+
+	make additional
+	g++ -L./static -L/usr/lib main.c -static -lsqlite3 -o test00_static && ./test00_static
+	/usr/bin/ld: ./static/libsqlite3.a(sqlite3.o): in function `unixDlOpen':
+	/home/user/Code/sqlite/static/sqlite/build/sqlite3.c:42061: warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
+	word='helloworld' value=20
+	word='archlinux' value=30
+
+	ldd ./test00_static 
+	not a dynamic executable
+
+	ls -larth ./test00_static 
+	-rwxr-xr-x 1 user users 5.7M Sep 12 19:23 ./test00_static*
+
+But the cleanest approach for 'static' binaries would be to use a proper Docker, where boost, sqlite and vsqlite++ are dealt with. Besides, you might avoid ugly 'statically' built dependencies, i.e. [ldopen](https://wiki.musl-libc.org/functional-differences-from-glibc.html#Lazy-bindings), that way. Remember you might have let your docker container to access Internet to download additional packages:
+
+	# host /etc/resolv.conf --> nameserver 8.8.8.8
+	docker build --network host -t sqlite-debian-c .
+	docker run --rm -v `pwd`:/tmp -t sqlite-debian-c make static-binary
+
+Take into account that you might want to modify what 'user' is used at that Dockerfile.
+
 ## [C++](test01/)
 
 Taking for granted your daily driver is Linux, i.e. Archlinux, is very easy to have installed your dependencies with the standard package manager, i.e. pacman, and develop in the usual way.
@@ -31,7 +79,7 @@ As expected, the more dependencies your binary has, the smaller it is:
 	libsqlite3.so.0 => /usr/lib/libsqlite3.so.0 (0x00007fa22aace000)
 	/lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007fa22b293000)
 
-	test01 ls -larth ./test01
+	ls -larth ./test01
 	-rwxr-xr-x 1 user users 30K Aug 20 21:50 ./test01*
 
 Trying to generate 'static' binaries will depend on what libraries you're using and what operative system you should support. For example, if your Linux distro doesn't install all 'static' libraries by default, i.e. Archlinux got only boost static libraries, you should provide the rest. 
@@ -122,4 +170,5 @@ For fast development, when your team doesn't have too much time or willingmess t
 If your team can invest the time on learning complex languages and developing at a bit slower pace, Rust could be your next candidate. Take into account its learning curve is not a joke and its dependency on a C toolchain might be a limitaton for some company policies. Being a "novelty" doesn't help on a typical corporate Windows workplace although developers love this language and its tooling. 
 
 In case your product requires fast and small binaries, C++ might be the best option to get your bosses on board. But only provided you're working with containers and/or allowed to invest time on DevOps. Getting your toolchain to produce small static binaries to be easily deployed might imply to use the latest versions of compilers and dependencies and investigations on your Linux boxes. Having avaible updated Docker images should spare you a lot of time and suffering.
- 
+
+Provided you have experience in C, that language is the best option to generate libraries that can be called by C++, Rust, Go, Java, ... The code itself will be the most "verbose" and the most difficult to get younger developers aboard in your company. For large projects, you must enforce a real disciplined approach in your team; C is not a forgiving language when it comes down to production issues. 
